@@ -42,6 +42,7 @@ class ResourceWorker:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.example:
             self.example.close()
+        return True #Эта строка глотает исключения. Это не рекомендуется.
 
 if __name__ == "__main__":
     with ResourceWorker(1, 2, 4) as result:
