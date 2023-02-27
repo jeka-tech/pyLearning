@@ -7,16 +7,22 @@ def squares_2():
         yield e ** 2
     return 100
 
-gen = squares_2()
-gen_2 = squares_2()
-print(gen)
-print(gen_2)
+def pause():
+    print("Generator working")
+    while True:
+        print(a)
+        yield a
 
+a = 10
+gen = pause()
+print(next(gen))
+a = 20
+print(next(gen))
 
-for i in gen:
-    print(i)
-
-print('='*20)
-
-for i in gen_2:
-    print(i)
+# for i in gen:
+#     print(i)
+#
+# print('='*20)
+#
+# for i in gen_2:
+#     print(i)
