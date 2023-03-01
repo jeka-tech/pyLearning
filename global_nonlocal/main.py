@@ -20,3 +20,4 @@ def increment():
 if __name__ == '__main__':
     increment()
     print('new')
+    print('ne2w')
