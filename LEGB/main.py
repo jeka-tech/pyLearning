@@ -1,3 +1,6 @@
+import builtins
+print(dir(builtins))
+
 open = 'global'
 # max = 10
 def outer():
