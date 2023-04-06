@@ -3,6 +3,10 @@ print(dir(builtins))
 
 open = 'global'
 # max = 10
+
+a=5
+b=10
+
 def outer():
     open = 'encoled'
 
@@ -15,3 +19,9 @@ def outer():
 
 if __name__ == '__main__':
     outer()
+    a=b+a
+    b=a-b
+    a=a-b
+
+    print(f'{a=}')
+    print(f'{b=}')
