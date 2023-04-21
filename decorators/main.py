@@ -1,25 +1,22 @@
-# Функция - полноправный объект
-# Функция может захватывать переменные из внешней функции
+# Функция - полноправный объект или объект первого класса
 
+# Внутренняя функция может захватывать переменные из внешней функции
 def logger(func):
     def wrapper(*args):
-        print(f'{func.__name__} started')
+        print("start")
         result = func(*args)
-        print(f'{func.__name__} finished')
+        print("stop")
         return result
 
     return wrapper
-@logger
+
+@ logger
 def summ(a, b):
     return a + b
 
+
+
+
+
 if __name__ == '__main__':
-
-    # print(logger(summ)(2, 3))
-
-    # summ = logger(summ)
-
-    # function = logger(summ)
-    # print(function(2, 3))
-
-    print(summ(2, 3))
+    print(summ(2,5))
