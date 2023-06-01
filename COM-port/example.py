@@ -5,6 +5,7 @@ s = serial.Serial('COM4', 115200)
 
 
 while True:
+
     try:
         if (s.isOpen() == False):
             s.open()
