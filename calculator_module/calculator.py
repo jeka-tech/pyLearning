@@ -1,3 +1,6 @@
+import time
+
+
 def subtraction (first, second):
     const = -1
     temp_var = 0
@@ -61,6 +64,9 @@ def division (a, b):
 
 
 if __name__ == "__main__":
+    start = time.time()
+    print(division(207686780, 5))
+    print(time.time() - start)
     assert (division(200, 5) == 40)
     assert (division(201, 5) == 40.2)
     assert (division(2, 4) == 0.5)
