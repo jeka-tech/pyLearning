@@ -10,7 +10,7 @@ class ServerHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write("html".encode('utf-8'))
 
-        if self.path == "/status":
+        elif self.path == "/status":
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
