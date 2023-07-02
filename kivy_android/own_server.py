@@ -1,6 +1,6 @@
 import socket
 import json
-
+import variables_list
 
 serv_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, proto=0)
 serv_sock.bind(('', 8000))
@@ -28,7 +28,8 @@ def serv_forever():
                 data_string = data.decode('utf-8')
                 if 'Temp01' in data_string:
                     decoded_hand = json.loads(data_string)
-                    print(decoded_hand["Temp01"])
+                    variables_list.temp_01 = float(decoded_hand["Temp01"])
+                    print(variables_list.temp_01)
                 if not data:
                     # Клиент отключился
                     break
