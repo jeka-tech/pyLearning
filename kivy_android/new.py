@@ -44,16 +44,12 @@ class MyApp(App):
             self.label_1.text = "starting..."
             self.thread_1.start()
             print(threading.enumerate())
-            self.label_1.text = "The server is running"
+            self.label_1.text = f"The server is running {own_server.serv_key}"
 
         elif instance.text == 'Stop server':
             self.label_1.text = "stoping..."
             own_server.serv_key = False
-            self.label_1.text = "The server is stopped"
-
-
-
-
+            self.label_1.text = f"The server is stopped {own_server.serv_key}"
 
 
 
