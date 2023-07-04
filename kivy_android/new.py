@@ -1,4 +1,5 @@
 import time
+import socket
 
 from kivy.app import  App
 from kivy.core.window import Window
@@ -20,6 +21,7 @@ class MyApp(App):
 
         self.thread_1 = Thread(target=own_server.serv_forever, daemon=True)
         self.thread_2 = Thread(target=self.update_variables, daemon=True)
+        self.thread_1.start()
         self.thread_2.start()
 
         main_layout = BoxLayout()
@@ -38,16 +40,12 @@ class MyApp(App):
 
     def manage_server(self, instance):
 
-        if instance.text == 'Start server' and not self.thread_1.is_alive():
+        if instance.text == 'Start server':
             own_server.serv_key = True
-            self.thread_1 = Thread(target=own_server.serv_forever, daemon=True)
-            self.label_1.text = "starting..."
-            self.thread_1.start()
             print(threading.enumerate())
             self.label_1.text = f"The server is running {own_server.serv_key}"
 
         elif instance.text == 'Stop server':
-            self.label_1.text = "stoping..."
             own_server.serv_key = False
             self.label_1.text = f"The server is stopped {own_server.serv_key}"
 
