@@ -1,5 +1,4 @@
 import time
-import socket
 
 from kivy.app import  App
 from kivy.core.window import Window
@@ -57,4 +56,3 @@ class MyApp(App):
 if __name__ == '__main__':
 
     MyApp().run()
-    # thread_1.join()
