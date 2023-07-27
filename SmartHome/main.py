@@ -10,6 +10,9 @@ import myServer
 from bs4 import BeautifulSoup
 import requests
 
+import cv2
+cap = cv2.VideoCapture('rtsp://admin:@192.168.0.111/1')
+
 temp_01 = 0.0
 
 Builder.load_string("""
