@@ -7,6 +7,8 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.lang import Builder
 from kivy.properties import StringProperty
 import myServer
+from bs4 import BeautifulSoup
+import requests
 
 temp_01 = 0.0
 
@@ -37,30 +39,30 @@ Builder.load_string("""
                     spacing: 10
                     Label:
                         text: 'Кабинет'
-                    Button:
+                    ToggleButton:
                         id: cab_1
                         text: 'Свет 1'
-                    Button:
+                    ToggleButton:
                         id: cab_2
                         text: 'Свет 2'
                     Label:
                     
                     Label:
                         text: 'Детская'
-                    Button:
+                    ToggleButton:
                         id: det_1
                         text: 'Свет 1'
-                    Button:
+                    ToggleButton:
                         id: det_2
                         text: 'Свет 2'
                     Label:
                     
                     Label:
                         text: 'Зал'
-                    Button:
+                    ToggleButton:
                         id: zal_1
                         text: 'Свет 1'
-                    Button:
+                    ToggleButton:
                         id: zal_2
                         text: 'Свет 2'
                     Label:
@@ -84,7 +86,7 @@ Builder.load_string("""
                     ToggleButton:
                         text: 'Пол'
                     ToggleButton:
-                        text: 'Вентилятор'
+                        text: 'Вент.'
                     
                     Label:
                         text: 'Туалет'
@@ -93,7 +95,7 @@ Builder.load_string("""
                     ToggleButton:
                         text: 'Пол'
                     ToggleButton:
-                        text: 'Вентилятор'
+                        text: 'Вент.'
                     
                     Label:
                         text: 'Коридор'
@@ -113,29 +115,49 @@ Builder.load_string("""
             
             BoxLayout:
                 size_hint: .6, 1
+                orientation: 'vertical'
                 padding: 10
+                spacing: 10
                 canvas.before:
                     Color:
                         rgba: 39/255, 204/255, 245/255, 1
                     Line:
                         width: 1
                         rectangle: self.x, self.y, self.width, self.height
+                
+                  
+                # Label:
+                #     font_name: 'seguiemj'
+                #     text: "🌶️"     
+                Button:
+                    size_hint: 1, .15
+                    text: 'Прогноз погоды:'
+                    on_release: root.manual_update_forecast()
+                
+                Label:
+                    text_size: self.size
+                    valign: 'top'
+                    text: root.forecast    
+                        
                 GridLayout:
                     cols: 2
                     Label:
-                        text: 'Температура\\n на улице'
+                        halign: 'center'
+                        text: 'Температура\\nна улице'
                     Label:
                         text: root.streetTemp
                     
                     Label:
-                        text: 'Влажность\\n на улице'
+                        halign: 'center'
+                        text: 'Влажность\\nна улице'
                     Label:
                         text: root.streetHum
                     
                     Label:
-                        text: 'Атмосферное\\n давление'
+                        halign: 'center'
+                        text: 'Атм.\\nдавление'
                     Label:
-                        text: '755 мм.рт.ст.'
+                        text: '755'
             
                     
     TabbedPanelItem:
@@ -170,14 +192,17 @@ Builder.load_string("""
 class Test(TabbedPanel):
     streetTemp = StringProperty()
     streetHum = StringProperty()
+    forecast = StringProperty()
     def __init__(self, **kwargs):
         super(Test, self).__init__(**kwargs)
         # Clock.schedule_interval(self.update, 5)
 
         self.thread_1 = Thread(target=myServer.serv_forever, daemon=True)
         self.thread_2 = Thread(target=self.update_variables, daemon=True)
+        self.thread_3 = Thread(target=self.update_forecast, daemon=True)
         self.thread_1.start()
         self.thread_2.start()
+        self.thread_3.start()
     def manage_server(self, instance):
 
         if instance == 'Start server':
@@ -193,6 +218,33 @@ class Test(TabbedPanel):
     #     self.random_number = f'{temp_01:.1f}'
     #     print(f'{temp_01:.1f}')
 
+    def manual_update_forecast(self):
+        try:
+            page = requests.get('https://rp5.ru/Погода_в_Самаре,_Самарская_область')
+            soup = BeautifulSoup(page.text, "html.parser")
+            temp = soup.find('div', id='forecastShort-content')
+            for match in temp.findAll('span', class_="t_1"):
+                match.clear()
+            self.forecast = temp.text[1:]
+        except Exception as err:
+            print(err)
+            self.forecast = 'Не удалось загрузить прогноз погоды'
+
+    def update_forecast(self):
+        while True:
+            try:
+                page = requests.get('https://rp5.ru/Погода_в_Самаре,_Самарская_область')
+                soup = BeautifulSoup(page.text, "html.parser")
+                temp = soup.find('div', id='forecastShort-content')
+
+                for match in temp.findAll('span', class_="t_1"):
+                    match.clear()
+
+                self.forecast = temp.text[1:]
+            except Exception as err:
+                print(err)
+                self.forecast = 'Не удалось загрузить прогноз погоды'
+            time.sleep(3600)
     def update_variables(self):
         while True:
             self.streetTemp = f'{myServer.temp_01:.1f}'
