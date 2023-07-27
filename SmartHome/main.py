@@ -184,7 +184,7 @@ Builder.load_string("""
                 text: 'Остановить сервер'
                 on_press: root.manage_server('Stop server')
             Label:
-                text: 'Serv ...'
+                text: root.serverStatus
 
 """)
 
@@ -193,9 +193,9 @@ class Test(TabbedPanel):
     streetTemp = StringProperty()
     streetHum = StringProperty()
     forecast = StringProperty()
+    serverStatus = StringProperty()
     def __init__(self, **kwargs):
         super(Test, self).__init__(**kwargs)
-        # Clock.schedule_interval(self.update, 5)
 
         self.thread_1 = Thread(target=myServer.serv_forever, daemon=True)
         self.thread_2 = Thread(target=self.update_variables, daemon=True)
@@ -208,15 +208,11 @@ class Test(TabbedPanel):
         if instance == 'Start server':
             myServer.serv_key = True
             print(threading.enumerate())
-            # self.label_1.text = f"The server is running {myServer.serv_key}"
+            self.serverStatus = f"The server is running {myServer.serv_key}"
 
         elif instance == 'Stop server':
             myServer.serv_key = False
-            # self.label_1.text = f"The server is stopped {myServer.serv_key}"
-    # def update(self, *args):
-    #     print(type(temp_01))
-    #     self.random_number = f'{temp_01:.1f}'
-    #     print(f'{temp_01:.1f}')
+            self.serverStatus = f"The server is running {myServer.serv_key}"
 
     def manual_update_forecast(self):
         try:
