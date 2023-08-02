@@ -16,7 +16,7 @@ class KivyCamera(Image):
         if ret:
             # convert it to texture
             buf1 = cv2.flip(frame, 0)
-            buf = buf1.tostring()
+            buf = buf1.tobytes()
             image_texture = Texture.create(
                 size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
             image_texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
@@ -26,7 +26,7 @@ class KivyCamera(Image):
 
 class CamApp(App):
     def build(self):
-        self.capture = cv2.VideoCapture('rtsp://admin:@192.168.0.111/1')
+        self.capture = cv2.VideoCapture('rtsp://admin:@192.168.0.111')
         self.my_camera = KivyCamera(capture=self.capture, fps=30)
         return self.my_camera
 
