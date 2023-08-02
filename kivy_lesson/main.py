@@ -30,7 +30,7 @@ class KivyCamera(Image):
 
         super(KivyCamera, self).__init__(**kwargs)
         try:
-            print(requests.get('rtsp://admin:@192.168.0.111'))
+            print(requests.get('http://192.168.0.111', timeout=1))
             self.capture = cv2.VideoCapture('rtsp://admin:@192.168.0.111')
             Clock.schedule_interval(self.update, 1.0 / 30)
         except Exception as err:
@@ -40,7 +40,6 @@ class KivyCamera(Image):
         ret, frame = self.capture.read()
         if ret:
             # convert it to texture
-            print('3')
             buf1 = cv2.flip(frame, 0)
             buf = buf1.tobytes()
             image_texture = Texture.create(
