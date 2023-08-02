@@ -5,6 +5,7 @@ from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
 import cv2
+import requests
 
 Builder.load_string("""
 
@@ -26,13 +27,20 @@ Builder.load_string("""
 
 class KivyCamera(Image):
     def __init__(self, **kwargs):
+
         super(KivyCamera, self).__init__(**kwargs)
-        self.capture = cv2.VideoCapture('rtsp://admin:@192.168.0.111')
-        Clock.schedule_interval(self.update, 1.0 / 30)
+        try:
+            print(requests.get('rtsp://admin:@192.168.0.111'))
+            self.capture = cv2.VideoCapture('rtsp://admin:@192.168.0.111')
+            Clock.schedule_interval(self.update, 1.0 / 30)
+        except Exception as err:
+            print(err)
+
     def update(self, dt):
         ret, frame = self.capture.read()
         if ret:
             # convert it to texture
+            print('3')
             buf1 = cv2.flip(frame, 0)
             buf = buf1.tobytes()
             image_texture = Texture.create(
